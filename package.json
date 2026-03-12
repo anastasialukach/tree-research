@@ -1,0 +1,32 @@
+{
+  "name": "tree-research",
+  "version": "0.1.0",
+  "description": "Give AI a tree to climb, not a list to read. Installs a branching research protocol into any AI coding agent.",
+  "bin": {
+    "tree-research": "./bin/cli.js"
+  },
+  "keywords": [
+    "ai",
+    "research",
+    "claude",
+    "cursor",
+    "copilot",
+    "tree-search",
+    "autoresearch",
+    "prompt-engineering",
+    "agent"
+  ],
+  "author": "Anastasia Lukach <anastasia.lukach@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anastasialukach/tree-research"
+  },
+  "files": [
+    "bin/",
+    "protocol/",
+    "templates/",
+    "README.md",
+    "LICENSE"
+  ]
+}
