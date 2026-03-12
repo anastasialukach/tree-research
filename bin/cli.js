@@ -449,40 +449,33 @@ h1{font-size:32px;font-weight:800;color:#f5f5f7;letter-spacing:-0.5px}
 .stat-card .num{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:800;color:#22c55e}
 .stat-card .label{font-size:11px;color:#55555a;margin-top:2px;font-weight:600;letter-spacing:0.3px}
 
-/* Mind map container */
-.mindmap-container{background:#111113;border:1px solid #1e1e24;border-radius:14px;margin-bottom:32px;position:relative;overflow-x:auto;overflow-y:hidden}
-.mindmap-canvas{position:relative;min-height:300px;padding:32px 24px}
+/* Mind map — Notion-style */
+.mindmap-container{background:#111113;border:1px solid #1e1e24;border-radius:14px;margin-bottom:32px;overflow-x:auto;overflow-y:hidden;position:relative}
+.mindmap-canvas{position:relative;min-height:200px;padding:40px 32px}
 .mindmap-svg{position:absolute;top:0;left:0;pointer-events:none;z-index:0}
 
-/* Mind map cards */
-.mm-node{position:absolute;background:#141416;border:1px solid #1e1e24;border-radius:10px;padding:12px 16px;min-width:180px;max-width:240px;cursor:pointer;transition:all 0.25s ease;z-index:1;user-select:none}
-.mm-node:hover{border-color:#2a2a30;transform:translateY(-1px);box-shadow:0 4px 20px rgba(0,0,0,0.3)}
-.mm-node.collapsed .mm-children-indicator{display:flex}
-.mm-node.root{border-style:dashed;border-color:#33333a;max-width:280px;text-align:center}
-.mm-node.frontier{border-style:dashed;border-color:#89CFF033;opacity:0.7}
-.mm-node.frontier:hover{opacity:1}
+/* Pill nodes */
+.mm-node{position:absolute;border-radius:20px;padding:7px 18px;cursor:pointer;transition:all 0.2s ease;z-index:1;user-select:none;white-space:nowrap;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
+.mm-node:hover{transform:scale(1.04);filter:brightness(1.1)}
+.mm-node.root{padding:10px 24px;font-size:14px;font-weight:700;border-radius:24px}
+.mm-node.frontier{opacity:0.55;border-style:dashed}
+.mm-node.frontier:hover{opacity:0.85}
 .mm-node.hidden{display:none}
-.mm-node.highlight{border-color:#22c55e66;box-shadow:0 0 16px rgba(34,197,94,0.15)}
+.mm-node.highlight{box-shadow:0 0 0 2px #22c55e66}
 
-.mm-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:8px;flex-shrink:0;margin-top:2px}
-.mm-header{display:flex;align-items:flex-start}
-.mm-title{font-size:13px;font-weight:600;color:#e0e0e5;line-height:1.35}
-.mm-meta{font-family:'JetBrains Mono',monospace;font-size:10px;color:#44444a;margin-top:4px}
-.mm-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
-.mm-tag{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;background:#1a1a1e;border:1px solid #1e1e24;color:#66666b;letter-spacing:0.3px}
-.mm-tag.level{border-color:#22c55e28;color:#22c55e88}
-.mm-tag.file{border-color:#89CFF028;color:#89CFF088}
-.mm-tag.frontier-tag{border-color:#c4b5fd28;color:#c4b5fd88}
+.mm-label{line-height:1}
+.mm-count{font-family:'JetBrains Mono',monospace;font-size:10px;opacity:0.5;font-weight:500}
 
-.mm-expand{position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);width:20px;height:20px;border-radius:50%;background:#1a1a1e;border:1px solid #2a2a30;display:flex;align-items:center;justify-content:center;font-size:10px;color:#55555a;cursor:pointer;transition:all 0.15s;z-index:2}
-.mm-expand:hover{background:#222228;color:#e0e0e5;border-color:#44444a}
+/* Connection dot on right edge of expandable nodes */
+.mm-dot-btn{width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:9px;color:rgba(255,255,255,0.4);cursor:pointer;transition:all 0.15s;flex-shrink:0;margin-left:2px}
+.mm-dot-btn:hover{background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.7)}
 
 /* Level legend */
 .mm-legend{display:flex;gap:16px;padding:12px 28px 16px;border-top:1px solid #1a1a1e;flex-wrap:wrap;align-items:center}
 .legend-item{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:#55555a}
-.legend-dot{width:8px;height:8px;border-radius:2px}
+.legend-dot{width:8px;height:8px;border-radius:50%}
 .mm-controls{margin-left:auto;display:flex;gap:8px}
-.mm-btn{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:4px 10px;border-radius:5px;background:#1a1a1e;border:1px solid #1e1e24;color:#55555a;cursor:pointer;transition:all 0.15s}
+.mm-btn{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;padding:5px 12px;border-radius:8px;background:#1a1a1e;border:1px solid #1e1e24;color:#55555a;cursor:pointer;transition:all 0.15s}
 .mm-btn:hover{border-color:#33333a;color:#b0b0b5}
 
 /* Main grid */
@@ -823,7 +816,7 @@ const mmSvg = document.getElementById('mindmapSvg');
 // Node positions (computed by layout — LEFT TO RIGHT)
 const nodePositions = {};
 const nodeElements = {};
-const NODE_W = 210, NODE_H_BASE = 70, COL_GAP = 40, ROW_GAP = 16;
+const NODE_W = 210, NODE_H_BASE = 70, COL_GAP = 56, ROW_GAP = 14;
 
 function getNodeById(id) { return mindMap.nodes.find(n => n.id === id); }
 
@@ -855,13 +848,8 @@ function computeLayout() {
 
   const sortedLevels = Object.keys(byLevel).sort((a, b) => a - b).map(Number);
 
-  // Measure each node's expected height
-  function nodeH(node) {
-    let h = 52; // base: title + meta
-    if (node.tags && node.tags.length > 0) h += 28; // tags row
-    if (node.type === 'frontier' && node.meta) h += 20; // description
-    return h;
-  }
+  // Pill nodes are compact — fixed height
+  function nodeH() { return 34; }
 
   // Compute column x positions and vertical centering
   let x = 24;
@@ -869,7 +857,7 @@ function computeLayout() {
 
   for (const lvl of sortedLevels) {
     const nodes = byLevel[lvl];
-    const colW = lvl === 0 ? 230 : (nodes[0] && nodes[0].type === 'frontier' ? 210 : NODE_W);
+    const colW = lvl === 0 ? 260 : (nodes[0] && nodes[0].type === 'frontier' ? 220 : 240);
     const totalH = nodes.reduce((s, n) => s + nodeH(n) + ROW_GAP, -ROW_GAP);
     canvasH = Math.max(canvasH, totalH);
 
@@ -898,8 +886,17 @@ function computeLayout() {
   return { w: x + 20, h: canvasH + 60 };
 }
 
+// Color palettes per level (bg, text, border)
+const LEVEL_STYLES = [
+  { bg: '#f97316', text: '#fff', border: '#ea580c' },  // L0 root: orange
+  { bg: '#22c55e22', text: '#4ade80', border: '#22c55e44' },  // L1: green
+  { bg: '#eab30822', text: '#fbbf24', border: '#eab30844' },  // L2: amber
+  { bg: '#a78bfa22', text: '#c4b5fd', border: '#a78bfa44' },  // L3: purple
+  { bg: '#f472b622', text: '#f472b6', border: '#f472b644' },  // L4: pink
+];
+const FRONTIER_STYLE = { bg: '#89CFF00a', text: '#89CFF088', border: '#89CFF033' };
+
 function renderNodes() {
-  // Remove old node elements
   Object.values(nodeElements).forEach(el => el.remove());
   Object.keys(nodeElements).forEach(k => delete nodeElements[k]);
 
@@ -910,37 +907,32 @@ function renderNodes() {
 
     const el = document.createElement('div');
     const typeClass = node.type === 'root' ? ' root' : node.type === 'frontier' ? ' frontier' : '';
-    const expandedClass = node.expanded ? '' : ' collapsed';
-    el.className = 'mm-node' + typeClass + expandedClass;
-    const nodeW = pos.w || NODE_W;
+    el.className = 'mm-node' + typeClass;
     el.style.left = pos.x + 'px';
     el.style.top = pos.y + 'px';
-    el.style.width = nodeW + 'px';
     el.dataset.id = node.id;
 
-    const color = node.type === 'root' ? '#f5f5f7' : (LEVEL_COLORS[Math.min(node.level, LEVEL_COLORS.length - 1)] || '#94a3b8');
-    const dotColor = node.type === 'frontier' ? '#89CFF066' : color;
+    // Style by level
+    const style = node.type === 'frontier' ? FRONTIER_STYLE :
+      (LEVEL_STYLES[Math.min(node.level, LEVEL_STYLES.length - 1)] || LEVEL_STYLES[0]);
+    el.style.background = style.bg;
+    el.style.color = style.text;
+    el.style.border = '1.5px solid ' + style.border;
 
-    let html = '<div class="mm-header">';
-    html += '<span class="mm-dot" style="background:' + dotColor + '"></span>';
-    html += '<span class="mm-title">' + esc(node.label) + '</span>';
-    html += '</div>';
-    html += '<div class="mm-meta">' + esc(node.meta || '') + '</div>';
+    // Compact label — truncate long titles
+    const maxLen = node.type === 'root' ? 32 : 26;
+    const label = node.label.length > maxLen ? node.label.slice(0, maxLen - 1) + '...' : node.label;
+    let html = '<span class="mm-label">' + esc(label) + '</span>';
 
-    // Tags
-    if (node.tags && node.tags.length > 0) {
-      html += '<div class="mm-tags">';
-      for (const tag of node.tags) {
-        const tagClass = tag.startsWith('L') ? 'level' : tag === 'frontier' || tag === 'next-session' ? 'frontier-tag' : tag.endsWith('.md') || tag.includes('-') ? 'file' : '';
-        html += '<span class="mm-tag ' + tagClass + '">#' + esc(tag) + '</span>';
-      }
-      html += '</div>';
+    // Child count badge for collapsed nodes with children
+    if (node.children && node.children.length > 0 && !node.expanded) {
+      html += '<span class="mm-count">+' + node.children.length + '</span>';
     }
 
-    // Expand button if has children
+    // Expand dot button
     if (node.children && node.children.length > 0) {
       const symbol = node.expanded ? '−' : '+';
-      html += '<div class="mm-expand" onclick="event.stopPropagation();toggleNode(\\''+node.id+'\\')">' + symbol + '</div>';
+      html += '<div class="mm-dot-btn" onclick="event.stopPropagation();toggleNode(\\''+node.id+'\\')"><span>' + symbol + '</span></div>';
     }
 
     el.innerHTML = html;
@@ -977,14 +969,16 @@ function renderEdges() {
     const x2 = toPos.x;
     const y2 = toPos.y + toH / 2;
 
-    const color = toNode.type === 'frontier' ? '#89CFF033' :
-      (LEVEL_COLORS[Math.min(toNode.level, LEVEL_COLORS.length - 1)] || '#333') + '44';
+    // Use parent's color for the connection line
+    const fromStyle = fromNode.type === 'frontier' ? FRONTIER_STYLE :
+      (LEVEL_STYLES[Math.min(fromNode.level, LEVEL_STYLES.length - 1)] || LEVEL_STYLES[0]);
+    const color = toNode.type === 'frontier' ? '#89CFF022' : fromStyle.border;
 
     const midX = (x1 + x2) / 2;
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     path.setAttribute('d', 'M' + x1 + ',' + y1 + ' C' + midX + ',' + y1 + ' ' + midX + ',' + y2 + ' ' + x2 + ',' + y2);
     path.setAttribute('stroke', color);
-    path.setAttribute('stroke-width', '1.5');
+    path.setAttribute('stroke-width', '2');
     path.setAttribute('fill', 'none');
     if (edge.dashed) path.setAttribute('stroke-dasharray', '6,4');
     mmSvg.appendChild(path);
