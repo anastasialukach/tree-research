@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tree Research vs Linear Research — VC Podcast Landscape</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    background: #0a0a0c;
+    color: #e8e8ec;
+    line-height: 1.55;
+    font-size: 14px;
+    font-weight: 430;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 48px 24px;
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    font-weight: 400;
+    color: #f5f5f7;
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    color: #88888d;
+    font-size: 15px;
+    margin-bottom: 48px;
+  }
+
+  .subtitle span {
+    color: #89CFF0;
+    font-weight: 500;
+  }
+
+  /* Section headers */
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #55555a;
+    margin-bottom: 16px;
+  }
+
+  /* Hero comparison cards */
+  .hero-row {
+    display: grid;
+    grid-template-columns: 1fr 60px 1fr;
+    gap: 0;
+    margin-bottom: 48px;
+    align-items: stretch;
+  }
+
+  .hero-card {
+    background: #141416;
+    border: 1px solid #222228;
+    border-radius: 12px;
+    padding: 32px;
+  }
+
+  .hero-card.linear {
+    border-color: #3a2020;
+  }
+
+  .hero-card.tree {
+    border-color: #1a3a2a;
+  }
+
+  .hero-card h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    font-weight: 400;
+    margin-bottom: 4px;
+  }
+
+  .hero-card.linear h2 { color: #e85d5d; }
+  .hero-card.tree h2 { color: #4ecb71; }
+
+  .hero-card .grade {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 64px;
+    font-weight: 700;
+    margin: 16px 0;
+  }
+
+  .hero-card.linear .grade { color: #e85d5d; }
+  .hero-card.tree .grade { color: #4ecb71; }
+
+  .hero-card .grade-label {
+    font-size: 13px;
+    color: #77777c;
+    margin-bottom: 24px;
+  }
+
+  .vs-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: #55555a;
+    font-weight: 600;
+  }
+
+  /* Metric rows inside hero */
+  .metric-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #1a1a1e;
+  }
+
+  .metric-row:last-child { border-bottom: none; }
+
+  .metric-label {
+    font-size: 13px;
+    color: #88888d;
+  }
+
+  .metric-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    color: #e8e8ec;
+  }
+
+  .metric-value.bad { color: #e85d5d; }
+  .metric-value.good { color: #4ecb71; }
+  .metric-value.warn { color: #e8a84c; }
+
+  /* Bar chart comparison */
+  .bar-section {
+    margin-bottom: 48px;
+  }
+
+  .bar-group {
+    margin-bottom: 20px;
+  }
+
+  .bar-label {
+    font-size: 13px;
+    color: #b0b0b5;
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .bar-label .values {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
+
+  .bar-label .values .linear-val { color: #e85d5d; }
+  .bar-label .values .tree-val { color: #4ecb71; }
+
+  .bar-track {
+    height: 28px;
+    background: #141416;
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #1a1a1e;
+  }
+
+  .bar-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    border-radius: 5px;
+    transition: width 1s ease;
+  }
+
+  .bar-fill.linear {
+    background: linear-gradient(90deg, #e85d5d22, #e85d5d66);
+    border-right: 2px solid #e85d5d;
+    z-index: 1;
+  }
+
+  .bar-fill.tree {
+    background: linear-gradient(90deg, #4ecb7122, #4ecb7166);
+    border-right: 2px solid #4ecb71;
+    z-index: 2;
+  }
+
+  /* Tree visualization */
+  .tree-viz {
+    background: #141416;
+    border: 1px solid #222228;
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 48px;
+    overflow-x: auto;
+  }
+
+  .tree-level {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+    align-items: flex-start;
+  }
+
+  .tree-level-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #55555a;
+    width: 60px;
+    flex-shrink: 0;
+    padding-top: 8px;
+  }
+
+  .tree-nodes {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .tree-node {
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .tree-node.seed {
+    background: #89CFF022;
+    border: 1px solid #89CFF066;
+    color: #89CFF0;
+  }
+
+  .tree-node.l1 {
+    background: #4ecb7118;
+    border: 1px solid #4ecb7144;
+    color: #6dd88a;
+  }
+
+  .tree-node.l2 {
+    background: #e8a84c18;
+    border: 1px solid #e8a84c44;
+    color: #e8a84c;
+  }
+
+  .tree-node.pruned {
+    background: #ffffff08;
+    border: 1px solid #ffffff15;
+    color: #55555a;
+    text-decoration: line-through;
+  }
+
+  .tree-connector {
+    color: #333338;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    padding: 0 4px;
+    align-self: center;
+  }
+
+  /* Insight grid */
+  .insight-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+    margin-bottom: 48px;
+  }
+
+  .insight-card {
+    background: #141416;
+    border: 1px solid #222228;
+    border-radius: 8px;
+    padding: 16px;
+  }
+
+  .insight-card .cat {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .insight-card .cat.guest { color: #89CFF0; }
+  .insight-card .cat.competitive { color: #e8a84c; }
+  .insight-card .cat.mena { color: #4ecb71; }
+  .insight-card .cat.growth { color: #c084fc; }
+  .insight-card .cat.content { color: #f472b6; }
+  .insight-card .cat.network { color: #60a5fa; }
+  .insight-card .cat.collab { color: #34d399; }
+  .insight-card .cat.data { color: #a78bfa; }
+
+  .insight-card .title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #e8e8ec;
+    margin-bottom: 6px;
+    line-height: 1.4;
+  }
+
+  .insight-card .priority {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block;
+  }
+
+  .priority.top {
+    background: #4ecb7120;
+    color: #4ecb71;
+    border: 1px solid #4ecb7140;
+  }
+
+  .priority.high {
+    background: #89CFF020;
+    color: #89CFF0;
+    border: 1px solid #89CFF040;
+  }
+
+  .priority.medium {
+    background: #e8a84c15;
+    color: #e8a84c;
+    border: 1px solid #e8a84c30;
+  }
+
+  /* Audit comparison table */
+  .audit-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 48px;
+  }
+
+  .audit-table th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #55555a;
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid #222228;
+  }
+
+  .audit-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #141416;
+    font-size: 13px;
+  }
+
+  .audit-table .dimension {
+    color: #b0b0b5;
+    font-weight: 500;
+  }
+
+  .score-bar-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .score-mini-bar {
+    flex: 1;
+    height: 6px;
+    background: #1a1a1e;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .score-mini-bar .fill {
+    height: 100%;
+    border-radius: 3px;
+  }
+
+  .score-mini-bar .fill.red { background: #e85d5d; }
+  .score-mini-bar .fill.green { background: #4ecb71; }
+  .score-mini-bar .fill.amber { background: #e8a84c; }
+
+  .score-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    width: 36px;
+    text-align: right;
+  }
+
+  .score-num.red { color: #e85d5d; }
+  .score-num.green { color: #4ecb71; }
+  .score-num.amber { color: #e8a84c; }
+
+  /* Stats row */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+    margin-bottom: 48px;
+  }
+
+  .stat-card {
+    background: #141416;
+    border: 1px solid #222228;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .stat-card .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 28px;
+    font-weight: 700;
+    color: #4ecb71;
+  }
+
+  .stat-card .label {
+    font-size: 11px;
+    color: #77777c;
+    margin-top: 4px;
+  }
+
+  /* Frontier section */
+  .frontier-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 12px;
+    margin-bottom: 48px;
+  }
+
+  .frontier-card {
+    background: #141416;
+    border: 1px solid #222228;
+    border-left: 3px solid #89CFF0;
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+
+  .frontier-card .seed-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #e8e8ec;
+    margin-bottom: 4px;
+  }
+
+  .frontier-card .seed-from {
+    font-size: 11px;
+    color: #55555a;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* Key finding callout */
+  .finding-callout {
+    background: linear-gradient(135deg, #1a3a2a, #141416);
+    border: 1px solid #2a5a3a;
+    border-radius: 12px;
+    padding: 24px 32px;
+    margin-bottom: 48px;
+  }
+
+  .finding-callout h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: #4ecb71;
+    margin-bottom: 8px;
+  }
+
+  .finding-callout p {
+    font-size: 14px;
+    color: #b0b0b5;
+    line-height: 1.6;
+  }
+
+  .finding-callout strong {
+    color: #e8e8ec;
+  }
+
+  /* Linear failure callout */
+  .failure-callout {
+    background: linear-gradient(135deg, #3a2020, #141416);
+    border: 1px solid #5a2a2a;
+    border-radius: 12px;
+    padding: 24px 32px;
+    margin-bottom: 24px;
+  }
+
+  .failure-callout h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: #e85d5d;
+    margin-bottom: 8px;
+  }
+
+  .failure-callout p {
+    font-size: 14px;
+    color: #b0b0b5;
+    line-height: 1.6;
+  }
+
+  .failure-callout code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    background: #1a1a1e;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #e85d5d;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 32px 0;
+    border-top: 1px solid #1a1a1e;
+    color: #55555a;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .footer a {
+    color: #89CFF0;
+    text-decoration: none;
+  }
+
+  @media (max-width: 768px) {
+    .hero-row { grid-template-columns: 1fr; gap: 16px; }
+    .vs-divider { padding: 8px 0; }
+    .stats-row { grid-template-columns: repeat(3, 1fr); }
+    .insight-grid { grid-template-columns: 1fr; }
+    h1 { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>Linear vs Tree Research</h1>
+  <p class="subtitle">Same topic. Same agent. Same tools. Different protocol. <span>VC Podcast Landscape</span> / 2026-03-11 vs 2026-03-12</p>
+
+  <!-- Hero comparison -->
+  <div class="hero-row">
+    <div class="hero-card linear">
+      <h2>Linear Research</h2>
+      <p style="color:#77777c;font-size:13px;">Session 1 — March 11</p>
+      <div class="grade">C</div>
+      <div class="grade-label">Self-audit grade / 25% time on actual research</div>
+      <div class="metric-row">
+        <span class="metric-label">Guests profiled</span>
+        <span class="metric-value">118</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Verified LinkedIn URLs</span>
+        <span class="metric-value bad">21 of 93</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Real episode titles</span>
+        <span class="metric-value bad">36 of 213</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Sourced hooks</span>
+        <span class="metric-value bad">23 of 118</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Actionable insights</span>
+        <span class="metric-value bad">0</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Cross-references found</span>
+        <span class="metric-value bad">0</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Loulou Khazen Baz</span>
+        <span class="metric-value bad">0 episodes, null everything</span>
+      </div>
+    </div>
+
+    <div class="vs-divider">vs</div>
+
+    <div class="hero-card tree">
+      <h2>Tree Research</h2>
+      <p style="color:#77777c;font-size:13px;">Session 2 — March 12</p>
+      <div class="grade">A-</div>
+      <div class="grade-label">50 insights / 15 actionable / 3 levels deep</div>
+      <div class="metric-row">
+        <span class="metric-label">Research files</span>
+        <span class="metric-value good">8 deep branches</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Categorized insights</span>
+        <span class="metric-value good">50</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">TOP priority actions</span>
+        <span class="metric-value good">15</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Cross-branch patterns</span>
+        <span class="metric-value good">12</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Future research seeds</span>
+        <span class="metric-value good">30+</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Gaps discovered</span>
+        <span class="metric-value good">4 major</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Loulou Khazen Baz</span>
+        <span class="metric-value good">95 eps, 6 guests, circuit mapped</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- The Loulou contrast -->
+  <div class="failure-callout">
+    <h3>The Loulou Test</h3>
+    <p>Linear research gave Loulou Khazen Baz <code>appearances: 0</code>, <code>episodes: []</code>, <code>linkedin: null</code>, <code>twitter: null</code> — then wrote <strong>"huge fan of what you've built with Conversations with Loulou"</strong> in a sample outreach DM without knowing a single thing she'd built.</p>
+    <p style="margin-top:12px;">Tree research found: <strong>95+ episodes</strong>, <strong>6 named guests with episode titles</strong>, and discovered the <strong>MENA podcast circuit pattern</strong> — Loulou's show is the regional qualifying round before global shows like 20VC. That insight only exists because the tree went deep on one branch instead of wide across 118 entries.</p>
+  </div>
+
+  <!-- Key findings -->
+  <div class="finding-callout">
+    <h3>The finding no linear search would surface</h3>
+    <p><strong>MENA is the biggest blind spot across ALL major LP content platforms.</strong> Capital Allocators has 700+ episodes with zero MENA sovereign wealth coverage. The same gap exists across Origins, How I Invest, Alt Goes Mainstream, and Swimming with Allocators. This insight only emerged because 5 parallel branches independently mapped different ecosystems — the gap is visible when you compare all 5 trees, not from any single one.</p>
+  </div>
+
+  <!-- Stats row -->
+  <p class="section-label">Tree research output</p>
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="num">5</div>
+      <div class="label">Seeds</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">8</div>
+      <div class="label">Branch files</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">3</div>
+      <div class="label">Levels deep</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">50</div>
+      <div class="label">Insights</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">30+</div>
+      <div class="label">Future seeds</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">4</div>
+      <div class="label">Gaps found</div>
+    </div>
+  </div>
+
+  <!-- Tree visualization -->
+  <p class="section-label">Branch map</p>
+  <div class="tree-viz">
+    <div class="tree-level">
+      <div class="tree-level-label">SEEDS</div>
+      <div class="tree-nodes">
+        <div class="tree-node seed">Invest Like the Best</div>
+        <div class="tree-node seed">Capital Allocators</div>
+        <div class="tree-node seed">Venture Unlocked</div>
+        <div class="tree-node seed">All-In + 20VC</div>
+        <div class="tree-node seed">MENA Deep</div>
+      </div>
+    </div>
+    <div class="tree-level">
+      <div class="tree-level-label">LEVEL 1</div>
+      <div class="tree-nodes">
+        <div class="tree-node l1">Colossus network (7 shows)</div>
+        <div class="tree-node l1">CA ecosystem (6 platforms)</div>
+        <div class="tree-node l1">Allocate + fund-as-media</div>
+        <div class="tree-node l1">Summit economics</div>
+        <div class="tree-node l1">Loulou circuit</div>
+        <div class="tree-node l1">Ibrahim Ajami (SWF)</div>
+        <div class="tree-node l1">Diego Lopez (Global SWF)</div>
+        <div class="tree-node pruned">Tim Ferriss VC eps</div>
+        <div class="tree-node pruned">Podcast charts SEO</div>
+      </div>
+    </div>
+    <div class="tree-level">
+      <div class="tree-level-label">LEVEL 2</div>
+      <div class="tree-nodes">
+        <div class="tree-node l2">Media-to-fund pipeline (10+ examples)</div>
+        <div class="tree-node l2">LP content guild (~15 people)</div>
+        <div class="tree-node l2">MENA bridge people (6 profiles)</div>
+        <div class="tree-node pruned">Podcast hosting platforms</div>
+        <div class="tree-node pruned">Newsletter paywall models</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;padding-left:72px;">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#55555a;">
+        PRUNED = evaluated, scored low on novelty + connectivity. Not worth climbing.
+      </span>
+    </div>
+  </div>
+
+  <!-- Dimension comparison bars -->
+  <p class="section-label">Dimension comparison</p>
+  <div class="bar-section">
+    <div class="bar-group">
+      <div class="bar-label">
+        <span>Research depth</span>
+        <div class="values"><span class="linear-val">40</span> / <span class="tree-val">85</span></div>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill linear" style="width:40%"></div>
+        <div class="bar-fill tree" style="width:85%"></div>
+      </div>
+    </div>
+
+    <div class="bar-group">
+      <div class="bar-label">
+        <span>Data quality (verified vs fabricated)</span>
+        <div class="values"><span class="linear-val">20</span> / <span class="tree-val">75</span></div>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill linear" style="width:20%"></div>
+        <div class="bar-fill tree" style="width:75%"></div>
+      </div>
+    </div>
+
+    <div class="bar-group">
+      <div class="bar-label">
+        <span>Gaps identified</span>
+        <div class="values"><span class="linear-val">10</span> / <span class="tree-val">80</span></div>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill linear" style="width:10%"></div>
+        <div class="bar-fill tree" style="width:80%"></div>
+      </div>
+    </div>
+
+    <div class="bar-group">
+      <div class="bar-label">
+        <span>Cross-references / pattern detection</span>
+        <div class="values"><span class="linear-val">5</span> / <span class="tree-val">85</span></div>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill linear" style="width:5%"></div>
+        <div class="bar-fill tree" style="width:85%"></div>
+      </div>
+    </div>
+
+    <div class="bar-group">
+      <div class="bar-label">
+        <span>Actionable outputs</span>
+        <div class="values"><span class="linear-val">15</span> / <span class="tree-val">90</span></div>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill linear" style="width:15%"></div>
+        <div class="bar-fill tree" style="width:90%"></div>
+      </div>
+    </div>
+
+    <div class="bar-group">
+      <div class="bar-label">
+        <span>Specificity (names, numbers, dates)</span>
+        <div class="values"><span class="linear-val">30</span> / <span class="tree-val">80</span></div>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill linear" style="width:30%"></div>
+        <div class="bar-fill tree" style="width:80%"></div>
+      </div>
+    </div>
+
+    <div class="bar-group">
+      <div class="bar-label">
+        <span>Honesty (flagged uncertainty, marked gaps)</span>
+        <div class="values"><span class="linear-val">10</span> / <span class="tree-val">75</span></div>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill linear" style="width:10%"></div>
+        <div class="bar-fill tree" style="width:75%"></div>
+      </div>
+    </div>
+
+    <div class="bar-group">
+      <div class="bar-label">
+        <span>Volume (raw quantity of records)</span>
+        <div class="values"><span class="linear-val">85</span> / <span class="tree-val">45</span></div>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill linear" style="width:85%"></div>
+        <div class="bar-fill tree" style="width:45%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audit table -->
+  <p class="section-label">Self-audit scores</p>
+  <table class="audit-table">
+    <thead>
+      <tr>
+        <th style="width:30%">Dimension</th>
+        <th style="width:35%">Linear (Session 1)</th>
+        <th style="width:35%">Tree (Session 2)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="dimension">Research depth</td>
+        <td>
+          <div class="score-bar-cell">
+            <div class="score-mini-bar"><div class="fill red" style="width:40%"></div></div>
+            <span class="score-num red">40</span>
+          </div>
+        </td>
+        <td>
+          <div class="score-bar-cell">
+            <div class="score-mini-bar"><div class="fill green" style="width:85%"></div></div>
+            <span class="score-num green">85</span>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="dimension">Specificity</td>
+        <td>
+          <div class="score-bar-cell">
+            <div class="score-mini-bar"><div class="fill red" style="width:30%"></div></div>
+            <span class="score-num red">30</span>
+          </div>
+        </td>
+        <td>
+          <div class="score-bar-cell">
+            <div class="score-mini-bar"><div class="fill green" style="width:80%"></div></div>
+            <span class="score-num green">80</span>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="dimension">Gaps found</td>
+        <td>
+          <div class="score-bar-cell">
+            <div class="score-mini-bar"><div class="fill red" style="width:10%"></div></div>
+            <span class="score-num red">10</span>
+          </div>
+        </td>
+        <td>
+          <div class="score-bar-cell">
+            <div class="score-mini-bar"><div class="fill green" style="width:80%"></div></div>
+            <span class="score-num green">80</span>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="dimension">Cross-branch patterns</td>
+        <td>
+          <div class="score-bar-cell">
+            <div class="score-mini-bar"><div class="fill red" style="width:5%"></div></div>
+            <span class="score-num red">5</span>
+          </div>
+        </td>
+        <td>
+          <div class="score-bar-cell">
+            <div class="score-mini-bar"><div class="fill green" style="width:85%"></div></div>
+            <span class="score-num green">85</span>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="dimension">Frontier quality</td>
+        <td>
+          <div class="score-bar-cell">
+            <div class="score-mini-bar"><div class="fill red" style="width:0%"></div></div>
+            <span class="score-num red">0</span>
+          </div>
+        </td>
+        <td>
+          <div class="score-bar-cell">
+            <div class="score-mini-bar"><div class="fill green" style="width:78%"></div></div>
+            <span class="score-num green">78</span>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="dimension">Honesty</td>
+        <td>
+          <div class="score-bar-cell">
+            <div class="score-mini-bar"><div class="fill red" style="width:10%"></div></div>
+            <span class="score-num red">10</span>
+          </div>
+        </td>
+        <td>
+          <div class="score-bar-cell">
+            <div class="score-mini-bar"><div class="fill green" style="width:75%"></div></div>
+            <span class="score-num green">75</span>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="dimension" style="font-weight:700;color:#e8e8ec;">Overall average</td>
+        <td>
+          <div class="score-bar-cell">
+            <div class="score-mini-bar"><div class="fill red" style="width:16%"></div></div>
+            <span class="score-num red" style="font-weight:700;">16</span>
+          </div>
+        </td>
+        <td>
+          <div class="score-bar-cell">
+            <div class="score-mini-bar"><div class="fill green" style="width:80%"></div></div>
+            <span class="score-num green" style="font-weight:700;">80</span>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Top 15 insights -->
+  <p class="section-label">Top 15 actionable insights (tree research only)</p>
+  <div class="insight-grid">
+    <div class="insight-card">
+      <div class="cat competitive">Competitive Intel</div>
+      <div class="title">MENA is the biggest blind spot in LP content</div>
+      <span class="priority top">TOP</span>
+    </div>
+    <div class="insight-card">
+      <div class="cat network">Network Node</div>
+      <div class="title">LP content world is a closed loop of ~15 people</div>
+      <span class="priority top">TOP</span>
+    </div>
+    <div class="insight-card">
+      <div class="cat network">Network Node</div>
+      <div class="title">Diego Lopez exists in separate universe from LP podcasters</div>
+      <span class="priority top">TOP</span>
+    </div>
+    <div class="insight-card">
+      <div class="cat guest">Guest Opportunity</div>
+      <div class="title">Ibrahim Ajami — ONLY SWF exec who does podcasts</div>
+      <span class="priority top">TOP</span>
+    </div>
+    <div class="insight-card">
+      <div class="cat growth">Growth Tactic</div>
+      <div class="title">Media-to-fund pipeline proven with 10+ examples</div>
+      <span class="priority top">TOP</span>
+    </div>
+    <div class="insight-card">
+      <div class="cat content">Content Idea</div>
+      <div class="title">12-week MENA content sequence with cross-links</div>
+      <span class="priority top">TOP</span>
+    </div>
+    <div class="insight-card">
+      <div class="cat collab">Collaboration</div>
+      <div class="title">MAGNiTT has confirmed API — data partnership</div>
+      <span class="priority top">TOP</span>
+    </div>
+    <div class="insight-card">
+      <div class="cat growth">Growth Tactic</div>
+      <div class="title">Get on ONE LP show and the rest follow</div>
+      <span class="priority top">TOP</span>
+    </div>
+    <div class="insight-card">
+      <div class="cat mena">MENA Signal</div>
+      <div class="title">Tabby IPO 2026 = biggest MENA tech story</div>
+      <span class="priority top">TOP</span>
+    </div>
+    <div class="insight-card">
+      <div class="cat content">Content Idea</div>
+      <div class="title">Three media-to-capital models — pick your path</div>
+      <span class="priority top">TOP</span>
+    </div>
+    <div class="insight-card">
+      <div class="cat competitive">Competitive Intel</div>
+      <div class="title">Zero MENA accelerators produce podcasts</div>
+      <span class="priority top">TOP</span>
+    </div>
+    <div class="insight-card">
+      <div class="cat network">Network Node</div>
+      <div class="title">FII ThinkPod is hidden VC-to-SWF bridge</div>
+      <span class="priority top">TOP</span>
+    </div>
+    <div class="insight-card">
+      <div class="cat growth">Growth Tactic</div>
+      <div class="title">Transcript-as-SEO is a compounding content moat</div>
+      <span class="priority top">TOP</span>
+    </div>
+    <div class="insight-card">
+      <div class="cat content">Content Idea</div>
+      <div class="title">Five MENA content gaps VP should fill immediately</div>
+      <span class="priority top">TOP</span>
+    </div>
+    <div class="insight-card">
+      <div class="cat competitive">Competitive Intel</div>
+      <div class="title">Neither All-In nor 20VC has MENA coverage</div>
+      <span class="priority high">HIGH</span>
+    </div>
+  </div>
+
+  <!-- Category breakdown -->
+  <p class="section-label">Insights by category (50 total)</p>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:48px;">
+    <div class="stat-card" style="border-top:2px solid #89CFF0;">
+      <div class="num" style="color:#89CFF0;">7</div>
+      <div class="label">Guest opportunities</div>
+    </div>
+    <div class="stat-card" style="border-top:2px solid #e8a84c;">
+      <div class="num" style="color:#e8a84c;">6</div>
+      <div class="label">Competitive intel</div>
+    </div>
+    <div class="stat-card" style="border-top:2px solid #4ecb71;">
+      <div class="num" style="color:#4ecb71;">9</div>
+      <div class="label">MENA signals</div>
+    </div>
+    <div class="stat-card" style="border-top:2px solid #c084fc;">
+      <div class="num" style="color:#c084fc;">7</div>
+      <div class="label">Growth tactics</div>
+    </div>
+    <div class="stat-card" style="border-top:2px solid #f472b6;">
+      <div class="num" style="color:#f472b6;">11</div>
+      <div class="label">Content ideas</div>
+    </div>
+    <div class="stat-card" style="border-top:2px solid #60a5fa;">
+      <div class="num" style="color:#60a5fa;">6</div>
+      <div class="label">Network nodes</div>
+    </div>
+    <div class="stat-card" style="border-top:2px solid #34d399;">
+      <div class="num" style="color:#34d399;">5</div>
+      <div class="label">Collaborations</div>
+    </div>
+    <div class="stat-card" style="border-top:2px solid #a78bfa;">
+      <div class="num" style="color:#a78bfa;">3</div>
+      <div class="label">Data sources</div>
+    </div>
+  </div>
+
+  <!-- Frontier seeds -->
+  <p class="section-label">Frontier — Level 3+ candidates (next session starts here)</p>
+  <div class="frontier-grid">
+    <div class="frontier-card">
+      <div class="seed-title">Print media for niche audiences</div>
+      <div class="seed-from">from: media-models-deep</div>
+    </div>
+    <div class="frontier-card">
+      <div class="seed-title">Conference-as-business economics</div>
+      <div class="seed-from">from: media-models-deep</div>
+    </div>
+    <div class="frontier-card">
+      <div class="seed-title">"Partner, Research" as new VC role</div>
+      <div class="seed-from">from: media-models-deep</div>
+    </div>
+    <div class="frontier-card">
+      <div class="seed-title">$400M podcast-to-fund pipeline mechanics</div>
+      <div class="seed-from">from: media-models-deep</div>
+    </div>
+    <div class="frontier-card">
+      <div class="seed-title">Turpentine / a16z network full map</div>
+      <div class="seed-from">from: lp-ecosystem-deep</div>
+    </div>
+    <div class="frontier-card">
+      <div class="seed-title">MASIC + Saudi family office VC allocations</div>
+      <div class="seed-from">from: lp-ecosystem-deep</div>
+    </div>
+    <div class="frontier-card">
+      <div class="seed-title">Careem alumni founders</div>
+      <div class="seed-from">from: mena-bridge-people</div>
+    </div>
+    <div class="frontier-card">
+      <div class="seed-title">e& venture strategy ($400M+ deployed)</div>
+      <div class="seed-from">from: mena-bridge-people</div>
+    </div>
+    <div class="frontier-card">
+      <div class="seed-title">Tabby IPO timeline + bank coverage</div>
+      <div class="seed-from">from: mena-bridge-people</div>
+    </div>
+    <div class="frontier-card">
+      <div class="seed-title">GCC sovereign wealth deployment patterns</div>
+      <div class="seed-from">from: mena-deep</div>
+    </div>
+    <div class="frontier-card">
+      <div class="seed-title">SWF Academy — LBS Dubai campus alumni</div>
+      <div class="seed-from">from: mena-deep</div>
+    </div>
+    <div class="frontier-card">
+      <div class="seed-title">Abraaj Capital — Aramex MBO vs fraud scandal</div>
+      <div class="seed-from">from: mena-bridge-people</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    tree-research v0.1.0 &nbsp;/&nbsp; <a href="https://github.com/anastasialukach/tree-research">github.com/anastasialukach/tree-research</a> &nbsp;/&nbsp; npx tree-research init
+  </div>
+
+</div>
+</body>
+</html>
