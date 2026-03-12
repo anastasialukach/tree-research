@@ -449,28 +449,26 @@ h1{font-size:32px;font-weight:800;color:#f5f5f7;letter-spacing:-0.5px}
 .stat-card .num{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:800;color:#22c55e}
 .stat-card .label{font-size:11px;color:#55555a;margin-top:2px;font-weight:600;letter-spacing:0.3px}
 
-/* Mind map — Notion-style */
+/* Mind map — Notemap replica */
 .mindmap-container{background:#111113;border:1px solid #1e1e24;border-radius:14px;margin-bottom:32px;overflow-x:auto;overflow-y:hidden;position:relative}
 .mindmap-canvas{position:relative;min-height:200px;padding:40px 32px}
 .mindmap-svg{position:absolute;top:0;left:0;pointer-events:none;z-index:0}
 
-/* Pill nodes */
-.mm-node{position:absolute;border-radius:20px;padding:7px 18px;cursor:pointer;transition:all 0.2s ease;z-index:1;user-select:none;white-space:nowrap;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
-.mm-node:hover{transform:scale(1.04);filter:brightness(1.1)}
-.mm-node.root{padding:10px 24px;font-size:14px;font-weight:700;border-radius:24px}
-.mm-node.frontier{opacity:0.55;border-style:dashed}
-.mm-node.frontier:hover{opacity:0.85}
+/* Solid filled rounded-rect nodes */
+.mm-node{position:absolute;border-radius:10px;padding:8px 20px;cursor:pointer;transition:transform 0.18s ease,box-shadow 0.18s ease;z-index:1;user-select:none;white-space:nowrap;font-size:13.5px;font-weight:600;line-height:1.1}
+.mm-node:hover{transform:scale(1.04);box-shadow:0 4px 20px rgba(0,0,0,0.3)}
+.mm-node.root{padding:12px 28px;font-size:15px;font-weight:700;border-radius:12px}
+.mm-node.frontier{opacity:0.4}
+.mm-node.frontier:hover{opacity:0.7}
 .mm-node.hidden{display:none}
-.mm-node.highlight{box-shadow:0 0 0 2px #22c55e66}
+.mm-node.highlight{box-shadow:0 0 0 3px #fff3,0 4px 20px rgba(0,0,0,0.3)}
 
-.mm-label{line-height:1}
-.mm-count{font-family:'JetBrains Mono',monospace;font-size:10px;opacity:0.5;font-weight:500}
+/* White connector dot — right edge */
+.mm-connector{position:absolute;right:-6px;top:50%;transform:translateY(-50%);width:11px;height:11px;border-radius:50%;background:#2a2a30;border:2px solid #55555a;cursor:pointer;z-index:3;transition:all 0.15s}
+.mm-connector:hover{background:#55555a;border-color:#aaa;transform:translateY(-50%) scale(1.15)}
+.mm-connector.has-children{background:#44444a;border-color:#77777c}
 
-/* Connection dot on right edge of expandable nodes */
-.mm-dot-btn{width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:9px;color:rgba(255,255,255,0.4);cursor:pointer;transition:all 0.15s;flex-shrink:0;margin-left:2px}
-.mm-dot-btn:hover{background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.7)}
-
-/* Level legend */
+/* Legend + controls */
 .mm-legend{display:flex;gap:16px;padding:12px 28px 16px;border-top:1px solid #1a1a1e;flex-wrap:wrap;align-items:center}
 .legend-item{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:#55555a}
 .legend-dot{width:8px;height:8px;border-radius:50%}
@@ -886,15 +884,59 @@ function computeLayout() {
   return { w: x + 20, h: canvasH + 60 };
 }
 
-// Color palettes per level (bg, text, border)
-const LEVEL_STYLES = [
-  { bg: '#f97316', text: '#fff', border: '#ea580c' },  // L0 root: orange
-  { bg: '#22c55e22', text: '#4ade80', border: '#22c55e44' },  // L1: green
-  { bg: '#eab30822', text: '#fbbf24', border: '#eab30844' },  // L2: amber
-  { bg: '#a78bfa22', text: '#c4b5fd', border: '#a78bfa44' },  // L3: purple
-  { bg: '#f472b622', text: '#f472b6', border: '#f472b644' },  // L4: pink
+// Per-branch color palette — each L1 branch gets a unique color
+// Matches Notemap: orange root, then green, red, olive, teal, salmon, pink per branch
+const BRANCH_PALETTE = [
+  { bg: '#4ade80', text: '#0f2a0f', border: '#22c55e' },    // green
+  { bg: '#f87171', text: '#2a0f0f', border: '#ef4444' },    // red
+  { bg: '#a3e635', text: '#1a2a0f', border: '#84cc16' },    // lime
+  { bg: '#38bdf8', text: '#0f1e2a', border: '#0ea5e9' },    // sky
+  { bg: '#fb923c', text: '#2a1a0f', border: '#f97316' },    // orange
+  { bg: '#f472b6', text: '#2a0f1e', border: '#ec4899' },    // pink
+  { bg: '#a78bfa', text: '#1a0f2a', border: '#8b5cf6' },    // violet
+  { bg: '#fbbf24', text: '#2a240f', border: '#f59e0b' },    // amber
 ];
-const FRONTIER_STYLE = { bg: '#89CFF00a', text: '#89CFF088', border: '#89CFF033' };
+const ROOT_STYLE = { bg: '#f97316', text: '#fff', border: '#ea580c' };
+
+// Map each L1 node to a branch index for color assignment
+const branchColorMap = {};
+let branchIdx = 0;
+for (const node of mindMap.nodes) {
+  if (node.level === 1 || (node.level === (mindMap.nodes[0] ? 1 : 0))) {
+    branchColorMap[node.id] = branchIdx % BRANCH_PALETTE.length;
+    branchIdx++;
+  }
+}
+// Propagate colors to children — walk edges
+function getBranchColor(nodeId) {
+  if (branchColorMap[nodeId] !== undefined) return branchColorMap[nodeId];
+  const parentEdge = mindMap.edges.find(e => e.to === nodeId);
+  if (parentEdge) {
+    const parentColor = getBranchColor(parentEdge.from);
+    if (parentColor !== undefined) {
+      branchColorMap[nodeId] = parentColor;
+      return parentColor;
+    }
+  }
+  return 0;
+}
+for (const node of mindMap.nodes) getBranchColor(node.id);
+
+function getNodeStyle(node) {
+  if (node.type === 'root') return ROOT_STYLE;
+  if (node.type === 'frontier') {
+    const bi = branchColorMap[node.id] || 0;
+    const base = BRANCH_PALETTE[bi];
+    return { bg: base.bg + '33', text: base.bg, border: base.bg + '44' };
+  }
+  const bi = branchColorMap[node.id] || 0;
+  const base = BRANCH_PALETTE[bi];
+  // L2+ get a slightly muted version
+  if (node.level >= 2) {
+    return { bg: base.bg + 'cc', text: base.text, border: base.border + 'cc' };
+  }
+  return base;
+}
 
 function renderNodes() {
   Object.values(nodeElements).forEach(el => el.remove());
@@ -912,30 +954,24 @@ function renderNodes() {
     el.style.top = pos.y + 'px';
     el.dataset.id = node.id;
 
-    // Style by level
-    const style = node.type === 'frontier' ? FRONTIER_STYLE :
-      (LEVEL_STYLES[Math.min(node.level, LEVEL_STYLES.length - 1)] || LEVEL_STYLES[0]);
+    const style = getNodeStyle(node);
     el.style.background = style.bg;
     el.style.color = style.text;
-    el.style.border = '1.5px solid ' + style.border;
+    el.style.border = '2px solid ' + style.border;
 
-    // Compact label — truncate long titles
-    const maxLen = node.type === 'root' ? 32 : 26;
-    const label = node.label.length > maxLen ? node.label.slice(0, maxLen - 1) + '...' : node.label;
-    let html = '<span class="mm-label">' + esc(label) + '</span>';
+    // Clean label only — truncate
+    const maxLen = node.type === 'root' ? 30 : 24;
+    const label = node.label.length > maxLen ? node.label.slice(0, maxLen - 1) + '\u2026' : node.label;
+    el.innerHTML = esc(label);
 
-    // Child count badge for collapsed nodes with children
-    if (node.children && node.children.length > 0 && !node.expanded) {
-      html += '<span class="mm-count">+' + node.children.length + '</span>';
-    }
-
-    // Expand dot button
+    // White connector dot on right edge (Notemap style)
     if (node.children && node.children.length > 0) {
-      const symbol = node.expanded ? '−' : '+';
-      html += '<div class="mm-dot-btn" onclick="event.stopPropagation();toggleNode(\\''+node.id+'\\')"><span>' + symbol + '</span></div>';
+      const dot = document.createElement('div');
+      dot.className = 'mm-connector' + (node.expanded ? ' has-children' : '');
+      dot.addEventListener('click', (e) => { e.stopPropagation(); toggleNode(node.id); });
+      el.appendChild(dot);
     }
 
-    el.innerHTML = html;
     el.addEventListener('click', () => toggleNode(node.id));
     mmCanvas.appendChild(el);
     nodeElements[node.id] = el;
@@ -969,16 +1005,15 @@ function renderEdges() {
     const x2 = toPos.x;
     const y2 = toPos.y + toH / 2;
 
-    // Use parent's color for the connection line
-    const fromStyle = fromNode.type === 'frontier' ? FRONTIER_STYLE :
-      (LEVEL_STYLES[Math.min(fromNode.level, LEVEL_STYLES.length - 1)] || LEVEL_STYLES[0]);
-    const color = toNode.type === 'frontier' ? '#89CFF022' : fromStyle.border;
+    // Color matches the parent node's branch
+    const fromStyle = getNodeStyle(fromNode);
+    const color = toNode.type === 'frontier' ? fromStyle.border + '55' : fromStyle.border;
 
     const midX = (x1 + x2) / 2;
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     path.setAttribute('d', 'M' + x1 + ',' + y1 + ' C' + midX + ',' + y1 + ' ' + midX + ',' + y2 + ' ' + x2 + ',' + y2);
     path.setAttribute('stroke', color);
-    path.setAttribute('stroke-width', '2');
+    path.setAttribute('stroke-width', '2.5');
     path.setAttribute('fill', 'none');
     if (edge.dashed) path.setAttribute('stroke-dasharray', '6,4');
     mmSvg.appendChild(path);
