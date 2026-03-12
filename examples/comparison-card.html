@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Serif+Display&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0a0c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 40px;
+  }
+
+  .card {
+    width: 1200px;
+    height: 675px;
+    background: #0d0d0f;
+    border-radius: 20px;
+    border: 1px solid #1e1e24;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  /* Top bar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 40px 0 40px;
+  }
+
+  .logo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: #55555a;
+    letter-spacing: 0.5px;
+  }
+
+  .logo span { color: #4ecb71; }
+
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #55555a;
+    background: #141416;
+    border: 1px solid #1e1e24;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+
+  /* Headline */
+  .headline {
+    padding: 20px 40px 0 40px;
+  }
+
+  .headline h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 38px;
+    font-weight: 400;
+    color: #f5f5f7;
+    line-height: 1.15;
+  }
+
+  .headline h1 .dim { color: #55555a; }
+  .headline h1 .green { color: #4ecb71; }
+  .headline h1 .red { color: #e85d5d; }
+
+  .headline .sub {
+    font-size: 14px;
+    color: #77777c;
+    margin-top: 6px;
+  }
+
+  .headline .sub strong { color: #b0b0b5; font-weight: 600; }
+
+  /* Main content area */
+  .main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 24px 40px 28px 40px;
+  }
+
+  /* Column cards */
+  .col {
+    border-radius: 14px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .col.linear {
+    background: linear-gradient(180deg, #1a1215 0%, #121214 100%);
+    border: 1px solid #2d1a1a;
+  }
+
+  .col.tree {
+    background: linear-gradient(180deg, #111a15 0%, #121214 100%);
+    border: 1px solid #1a2d1f;
+  }
+
+  .col-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 20px;
+  }
+
+  .col-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .col.linear .col-title { color: #e85d5d; }
+  .col.tree .col-title { color: #4ecb71; }
+
+  .col-grade {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 32px;
+    font-weight: 700;
+  }
+
+  .col.linear .col-grade { color: #e85d5d; }
+  .col.tree .col-grade { color: #4ecb71; }
+
+  /* Metric rows */
+  .metrics {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .m-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 0;
+    border-bottom: 1px solid #ffffff08;
+  }
+
+  .m-row:last-child { border-bottom: none; }
+
+  .m-label {
+    font-size: 13px;
+    color: #77777c;
+    font-weight: 450;
+  }
+
+  .m-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: right;
+  }
+
+  .col.linear .m-val { color: #c0c0c5; }
+  .col.tree .m-val { color: #e8e8ec; }
+
+  .m-val.bad { color: #e85d5d !important; }
+  .m-val.good { color: #4ecb71 !important; }
+
+  /* Bottom bar with the punchline */
+  .bottom {
+    background: #141416;
+    border-top: 1px solid #1e1e24;
+    padding: 14px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .bottom .punch {
+    font-size: 14px;
+    color: #88888d;
+    font-weight: 450;
+  }
+
+  .bottom .punch strong {
+    color: #e8e8ec;
+    font-weight: 600;
+  }
+
+  .bottom .install {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #0d0d0f;
+    background: #4ecb71;
+    padding: 6px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <div class="topbar">
+    <div class="logo"><span>tree</span>-research</div>
+    <div class="tag">VC Podcast Landscape / same topic, same agent, same tools</div>
+  </div>
+
+  <div class="headline">
+    <h1>Same question. <span class="red">118 shallow entries</span> <span class="dim">vs</span> <span class="green">50 real insights.</span></h1>
+    <p class="sub">The only difference: <strong>structure.</strong> Linear research lists. Tree research branches, evaluates, and goes deeper where it matters.</p>
+  </div>
+
+  <div class="main">
+    <!-- Linear column -->
+    <div class="col linear">
+      <div class="col-header">
+        <span class="col-title">Linear</span>
+        <span class="col-grade">C</span>
+      </div>
+      <div class="metrics">
+        <div class="m-row">
+          <span class="m-label">Guests profiled</span>
+          <span class="m-val">118</span>
+        </div>
+        <div class="m-row">
+          <span class="m-label">Verified data</span>
+          <span class="m-val bad">20%</span>
+        </div>
+        <div class="m-row">
+          <span class="m-label">Fabricated entries</span>
+          <span class="m-val bad">177 fake titles</span>
+        </div>
+        <div class="m-row">
+          <span class="m-label">Actionable insights</span>
+          <span class="m-val bad">0</span>
+        </div>
+        <div class="m-row">
+          <span class="m-label">Gaps discovered</span>
+          <span class="m-val bad">0</span>
+        </div>
+        <div class="m-row">
+          <span class="m-label">Cross-references</span>
+          <span class="m-val bad">0</span>
+        </div>
+        <div class="m-row">
+          <span class="m-label">Next-session seeds</span>
+          <span class="m-val bad">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tree column -->
+    <div class="col tree">
+      <div class="col-header">
+        <span class="col-title">Tree</span>
+        <span class="col-grade">A-</span>
+      </div>
+      <div class="metrics">
+        <div class="m-row">
+          <span class="m-label">Branch files</span>
+          <span class="m-val">8 deep dives</span>
+        </div>
+        <div class="m-row">
+          <span class="m-label">Categorized insights</span>
+          <span class="m-val good">50</span>
+        </div>
+        <div class="m-row">
+          <span class="m-label">Immediately actionable</span>
+          <span class="m-val good">15 targets</span>
+        </div>
+        <div class="m-row">
+          <span class="m-label">Cross-branch patterns</span>
+          <span class="m-val good">12</span>
+        </div>
+        <div class="m-row">
+          <span class="m-label">Gaps discovered</span>
+          <span class="m-val good">4 major</span>
+        </div>
+        <div class="m-row">
+          <span class="m-label">Levels deep</span>
+          <span class="m-val good">3</span>
+        </div>
+        <div class="m-row">
+          <span class="m-label">Next-session seeds</span>
+          <span class="m-val good">30+</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom">
+    <span class="punch"><strong>Give AI a tree to climb</strong> — not a list to read.</span>
+    <span class="install">npx tree-research init</span>
+  </div>
+
+</div>
+</body>
+</html>
