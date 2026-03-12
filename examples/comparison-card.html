@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Serif+Display&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -34,7 +34,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 22px 40px 0 40px;
+    padding: 20px 40px 0 40px;
   }
 
   .logo {
@@ -48,8 +48,9 @@
   .logo span { color: #4ecb71; }
 
   .tag {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Inter', sans-serif;
     font-size: 11px;
+    font-weight: 500;
     color: #55555a;
     background: #141416;
     border: 1px solid #1e1e24;
@@ -59,34 +60,34 @@
 
   /* Headline */
   .headline {
-    padding: 16px 40px 0 40px;
+    padding: 14px 40px 0 40px;
   }
 
   .headline h1 {
-    font-family: 'DM Serif Display', serif;
-    font-size: 36px;
-    font-weight: 400;
+    font-family: 'Inter', sans-serif;
+    font-size: 40px;
+    font-weight: 800;
     color: #f5f5f7;
-    line-height: 1.15;
+    line-height: 1.1;
+    letter-spacing: -0.5px;
   }
 
-  .headline h1 .red { color: #e85d5d; }
-  .headline h1 .green { color: #4ecb71; }
-  .headline h1 .dim { color: #44444a; }
+  .headline h1 .red { color: #ef4444; }
+  .headline h1 .green { color: #22c55e; }
+  .headline h1 .dim { color: #3a3a40; font-weight: 600; }
 
   /* Main content area */
   .main {
-    flex: 1;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
-    padding: 20px 40px 0 40px;
+    padding: 18px 40px 0 40px;
   }
 
   /* Column cards */
   .col {
     border-radius: 14px;
-    padding: 20px 24px;
+    padding: 18px 22px;
     display: flex;
     flex-direction: column;
   }
@@ -105,28 +106,28 @@
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
   }
 
   .col-title {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 12px;
-    font-weight: 700;
+    font-weight: 800;
     letter-spacing: 1.5px;
     text-transform: uppercase;
   }
 
-  .col.linear .col-title { color: #e85d5d; }
-  .col.tree .col-title { color: #4ecb71; }
+  .col.linear .col-title { color: #ef4444; }
+  .col.tree .col-title { color: #22c55e; }
 
   .col-grade {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Inter', sans-serif;
     font-size: 28px;
-    font-weight: 700;
+    font-weight: 900;
   }
 
-  .col.linear .col-grade { color: #e85d5d; }
-  .col.tree .col-grade { color: #4ecb71; }
+  .col.linear .col-grade { color: #ef4444; }
+  .col.tree .col-grade { color: #22c55e; }
 
   /* Metric rows */
   .metrics {
@@ -139,16 +140,17 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 7px 0;
+    padding: 5.5px 0;
     border-bottom: 1px solid #ffffff06;
   }
 
   .m-row:last-child { border-bottom: none; }
 
   .m-label {
-    font-size: 12.5px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
     color: #77777c;
-    font-weight: 450;
+    font-weight: 500;
   }
 
   .m-val {
@@ -161,12 +163,12 @@
   .col.linear .m-val { color: #c0c0c5; }
   .col.tree .m-val { color: #e8e8ec; }
 
-  .m-val.bad { color: #e85d5d !important; }
-  .m-val.good { color: #4ecb71 !important; }
+  .m-val.bad { color: #ef4444 !important; }
+  .m-val.good { color: #22c55e !important; }
 
   /* Score bars section */
   .bars-section {
-    padding: 0 40px 16px 40px;
+    padding: 14px 40px 0 40px;
   }
 
   .bars-header {
@@ -177,9 +179,9 @@
   }
 
   .bars-title {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
     letter-spacing: 1.2px;
     text-transform: uppercase;
     color: #44444a;
@@ -188,8 +190,9 @@
   .bars-legend {
     display: flex;
     gap: 16px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
   }
 
   .legend-item {
@@ -204,66 +207,94 @@
     border-radius: 2px;
   }
 
-  .legend-dot.red { background: #e85d5d; }
-  .legend-dot.green { background: #4ecb71; }
-  .legend-label.red { color: #e85d5d; }
-  .legend-label.green { color: #4ecb71; }
+  .legend-dot.red { background: #ef4444; }
+  .legend-dot.green { background: #22c55e; }
+  .legend-label.red { color: #ef4444; }
+  .legend-label.green { color: #22c55e; }
 
+  /* Side by side bars */
   .bar-row {
     display: grid;
-    grid-template-columns: 110px 1fr 36px 36px;
+    grid-template-columns: 100px 1fr 32px;
     align-items: center;
     gap: 10px;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
   }
 
   .bar-dim {
+    font-family: 'Inter', sans-serif;
     font-size: 11px;
     color: #66666b;
-    font-weight: 500;
-    text-align: right;
-  }
-
-  .bar-track {
-    height: 14px;
-    background: #141416;
-    border-radius: 3px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .bar-fill {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    border-radius: 3px;
-  }
-
-  .bar-fill.linear-bar {
-    background: #e85d5d;
-    opacity: 0.5;
-    z-index: 1;
-  }
-
-  .bar-fill.tree-bar {
-    background: #4ecb71;
-    opacity: 0.65;
-    z-index: 2;
-  }
-
-  .bar-num {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
     font-weight: 600;
     text-align: right;
   }
 
-  .bar-num.red { color: #e85d5d; }
-  .bar-num.green { color: #4ecb71; }
+  .bar-pair {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .bar-line {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 10px;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 10px;
+    background: #141416;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 3px;
+  }
+
+  .bar-fill.red-bar {
+    background: #ef4444;
+  }
+
+  .bar-fill.green-bar {
+    background: #22c55e;
+  }
+
+  .bar-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    width: 22px;
+    text-align: right;
+  }
+
+  .bar-num.red { color: #ef4444; }
+  .bar-num.green { color: #22c55e; }
+
+  .bar-scores {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    align-items: flex-end;
+  }
+
+  .bar-score-line {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    height: 10px;
+    line-height: 10px;
+  }
+
+  .bar-score-line.red { color: #ef4444; }
+  .bar-score-line.green { color: #22c55e; }
 
   /* Bottom bar */
   .bottom {
+    margin-top: auto;
     background: #141416;
     border-top: 1px solid #1e1e24;
     padding: 12px 40px;
@@ -273,24 +304,25 @@
   }
 
   .bottom .punch {
-    font-size: 13.5px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
     color: #88888d;
-    font-weight: 450;
+    font-weight: 500;
   }
 
   .bottom .punch strong {
-    color: #e8e8ec;
-    font-weight: 600;
+    color: #f0f0f3;
+    font-weight: 700;
   }
 
   .bottom .install {
     font-family: 'JetBrains Mono', monospace;
     font-size: 12px;
     color: #0d0d0f;
-    background: #4ecb71;
+    background: #22c55e;
     padding: 6px 16px;
     border-radius: 6px;
-    font-weight: 600;
+    font-weight: 700;
   }
 </style>
 </head>
@@ -307,7 +339,6 @@
   </div>
 
   <div class="main">
-    <!-- Linear column -->
     <div class="col linear">
       <div class="col-header">
         <span class="col-title">Linear</span>
@@ -341,7 +372,6 @@
       </div>
     </div>
 
-    <!-- Tree column -->
     <div class="col tree">
       <div class="col-header">
         <span class="col-title">Tree</span>
@@ -376,7 +406,7 @@
     </div>
   </div>
 
-  <!-- Score comparison bars -->
+  <!-- Score comparison bars — side by side -->
   <div class="bars-section">
     <div class="bars-header">
       <span class="bars-title">Dimension scores</span>
@@ -388,62 +418,74 @@
 
     <div class="bar-row">
       <span class="bar-dim">Depth</span>
-      <div class="bar-track">
-        <div class="bar-fill linear-bar" style="width:40%"></div>
-        <div class="bar-fill tree-bar" style="width:85%"></div>
+      <div class="bar-pair">
+        <div class="bar-line"><div class="bar-track"><div class="bar-fill red-bar" style="width:40%"></div></div></div>
+        <div class="bar-line"><div class="bar-track"><div class="bar-fill green-bar" style="width:85%"></div></div></div>
       </div>
-      <span class="bar-num red">40</span>
-      <span class="bar-num green">85</span>
+      <div class="bar-scores">
+        <div class="bar-score-line red">40</div>
+        <div class="bar-score-line green">85</div>
+      </div>
     </div>
 
     <div class="bar-row">
       <span class="bar-dim">Specificity</span>
-      <div class="bar-track">
-        <div class="bar-fill linear-bar" style="width:30%"></div>
-        <div class="bar-fill tree-bar" style="width:80%"></div>
+      <div class="bar-pair">
+        <div class="bar-line"><div class="bar-track"><div class="bar-fill red-bar" style="width:30%"></div></div></div>
+        <div class="bar-line"><div class="bar-track"><div class="bar-fill green-bar" style="width:80%"></div></div></div>
       </div>
-      <span class="bar-num red">30</span>
-      <span class="bar-num green">80</span>
+      <div class="bar-scores">
+        <div class="bar-score-line red">30</div>
+        <div class="bar-score-line green">80</div>
+      </div>
     </div>
 
     <div class="bar-row">
       <span class="bar-dim">Gaps found</span>
-      <div class="bar-track">
-        <div class="bar-fill linear-bar" style="width:10%"></div>
-        <div class="bar-fill tree-bar" style="width:80%"></div>
+      <div class="bar-pair">
+        <div class="bar-line"><div class="bar-track"><div class="bar-fill red-bar" style="width:10%"></div></div></div>
+        <div class="bar-line"><div class="bar-track"><div class="bar-fill green-bar" style="width:80%"></div></div></div>
       </div>
-      <span class="bar-num red">10</span>
-      <span class="bar-num green">80</span>
+      <div class="bar-scores">
+        <div class="bar-score-line red">10</div>
+        <div class="bar-score-line green">80</div>
+      </div>
     </div>
 
     <div class="bar-row">
       <span class="bar-dim">Cross-branch</span>
-      <div class="bar-track">
-        <div class="bar-fill linear-bar" style="width:5%"></div>
-        <div class="bar-fill tree-bar" style="width:85%"></div>
+      <div class="bar-pair">
+        <div class="bar-line"><div class="bar-track"><div class="bar-fill red-bar" style="width:5%"></div></div></div>
+        <div class="bar-line"><div class="bar-track"><div class="bar-fill green-bar" style="width:85%"></div></div></div>
       </div>
-      <span class="bar-num red">5</span>
-      <span class="bar-num green">85</span>
+      <div class="bar-scores">
+        <div class="bar-score-line red">5</div>
+        <div class="bar-score-line green">85</div>
+      </div>
     </div>
 
     <div class="bar-row">
       <span class="bar-dim">Actionable</span>
-      <div class="bar-track">
-        <div class="bar-fill linear-bar" style="width:15%"></div>
-        <div class="bar-fill tree-bar" style="width:90%"></div>
+      <div class="bar-pair">
+        <div class="bar-line"><div class="bar-track"><div class="bar-fill red-bar" style="width:15%"></div></div></div>
+        <div class="bar-line"><div class="bar-track"><div class="bar-fill green-bar" style="width:90%"></div></div></div>
       </div>
-      <span class="bar-num red">15</span>
-      <span class="bar-num green">90</span>
+      <div class="bar-scores">
+        <div class="bar-score-line red">15</div>
+        <div class="bar-score-line green">90</div>
+      </div>
     </div>
 
     <div class="bar-row">
       <span class="bar-dim">Honesty</span>
-      <div class="bar-track">
-        <div class="bar-fill linear-bar" style="width:10%"></div>
-        <div class="bar-fill tree-bar" style="width:75%"></div>
+      <div class="bar-pair">
+        <div class="bar-line"><div class="bar-track"><div class="bar-fill red-bar" style="width:10%"></div></div></div>
+        <div class="bar-line"><div class="bar-track"><div class="bar-fill green-bar" style="width:75%"></div></div></div>
       </div>
-      <span class="bar-num red">10</span>
-      <span class="bar-num green">75</span>
+      <div class="bar-scores">
+        <div class="bar-score-line red">10</div>
+        <div class="bar-score-line green">75</div>
+      </div>
     </div>
   </div>
 
