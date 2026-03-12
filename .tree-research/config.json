@@ -1,0 +1,10 @@
+{
+  "seeds": 5,
+  "max_depth": 3,
+  "branches_per_level": 3,
+  "parallel": true,
+  "interactive": false,
+  "audit_on_complete": true,
+  "frontier_enabled": true,
+  "output_format": "markdown"
+}
